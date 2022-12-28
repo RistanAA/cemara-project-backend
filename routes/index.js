@@ -1,3 +1,3 @@
-const reportDA = require('./reportDA')
+const report = require('./report')
 
-module.exports = [reportDA]
+module.exports = [report]
