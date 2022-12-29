@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const connect = () => {
   mongoose
-    // .connect("mongodb://localhost:27017/week1_pt_2")
-    .connect("mongodb+srv://RistanAA:admin@cluster0.xldtokf.mongodb.net/cemara_project")
+    .connect(process.env.DB_CONNECTION)
     .catch(err => console.log(err));
 };
 
