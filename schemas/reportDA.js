@@ -22,7 +22,7 @@ const reportDASchema = new mongoose.Schema({
         required: true,
     },
     location: {
-        type: String,
+        type: Object,
         required: true,
     },
     community: {

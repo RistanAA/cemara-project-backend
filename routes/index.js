@@ -1,3 +1,4 @@
 const report = require('./report')
+const adopt = require('./adopt')
 
-module.exports = [report]
+module.exports = [report, adopt]
