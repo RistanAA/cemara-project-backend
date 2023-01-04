@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 
 const JWTSECRETKEY = "cemara";
 
-const User = require("../models/user");
+const User = require("../schemas/user");
 Users.use(cors());
 
 const re_pass = /^[a-zA-Z0-9]{4,30}$/;
