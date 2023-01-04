@@ -1,15 +1,23 @@
 const mongoose = require('mongoose')
 
-const reportARSchema = new mongoose.Schema({
-    reportType: {
+const adoptSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true,
     },
-    status: {
+    race: {
         type: String,
         required: true,
     },
-    phoneNumber: {
+    sex: {
+        type: String,
+        required: true,
+    },
+    age: {
+        type: Number,
+        required: true,
+    },
+    information: {
         type: String,
         required: true,
     },
@@ -17,25 +25,22 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    animalName: {
+    ownerName: {
         type: String,
         required: true,
     },
-    location: {
-        type: Object,
-        required: true,
-    },
-    name: {
+    ownerAddress: {
         type: String,
         required: true,
     },
-    email: {
+    ownerPhoneNumber: {
         type: String,
         required: true,
     },
+
 },
     {
         timestamps: true
     });
 
-module.exports = mongoose.model('ReportAR', reportARSchema)
+module.exports = mongoose.model('Adopt', adoptSchema)

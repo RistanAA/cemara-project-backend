@@ -9,7 +9,7 @@ const reportDARequest = Joi.object({
     phoneNumber: Joi.string().required(),
     imageUrl: Joi.string().required(),
     animalCategory: Joi.string().required(),
-    location: Joi.string().required(),
+    location: Joi.object().required(),
     community: Joi.allow(),
 })
 
@@ -45,7 +45,7 @@ const reportARRequest = Joi.object({
     phoneNumber: Joi.string().required(),
     imageUrl: Joi.string().required(),
     animalName: Joi.string().required(),
-    location: Joi.string().required(),
+    location: Joi.object().required(),
     name: Joi.string().required(),
     email: Joi.string().email().required(),
 
