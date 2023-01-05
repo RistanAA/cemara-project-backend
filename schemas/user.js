@@ -6,15 +6,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phoneNumber:{
-    type: String,
-    required: true,
-  },
+  // phoneNumber:{
+  //   type: String,
+  //   required: true,
+  // },
   namaLembaga: {
-    type: String,
-    required: true,
-  },
-  username: {
     type: String,
     required: true,
   },
@@ -22,9 +18,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  imageUrl: {
-    type: String,
-  },
+  // imageUrl: {
+  //   type: String,
+  // },
   createdAt: {
     type: Date,
     default: Date.now,

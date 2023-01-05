@@ -3,6 +3,7 @@ const router = express.Router()
 const Joi = require('joi')
 const ReportDA = require('../schemas/reportDA')
 const ReportAR = require('../schemas/reportAR')
+const authMiddleware = require('../middlewares/authMiddleware')
 
 const reportDARequest = Joi.object({
     reportType: Joi.string().required(),
@@ -78,7 +79,7 @@ router.post('/report/ar', async (req, res) => {
 })
 
 
-router.get('/report', async (req, res) => {
+router.get('/report', authMiddleware, async (req, res) => {
     try {
         let data = []
         const dataAR = await ReportAR.find({}, {
