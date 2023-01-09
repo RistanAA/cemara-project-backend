@@ -79,21 +79,79 @@ router.post('/report/ar', async (req, res) => {
 })
 
 
-router.get('/report', authMiddleware, async (req, res) => {
+router.get('/report', async (req, res) => {
     try {
         let data = []
+
+        const format = (inputDate) => {
+            let date, month, year;
+          
+            date = inputDate.getDate();
+            month = inputDate.getMonth() + 1;
+            year = inputDate.getFullYear();
+          
+              date = date
+                  .toString()
+                  .padStart(2, '0');
+          
+              month = month
+                  .toString()
+                  .padStart(2, '0');
+          
+            return `${date}/${month}/${year}`;
+          }
+
+        const setNewTime = (itemTime) => {
+            // console.log(itemTime);
+            let time = new Date(itemTime)
+            let now = new Date()
+            // console.log(now);
+
+            let differentDays = (now.getTime() - time.getTime()) / (1000 * 3600 * 24)
+            let newTime = ""
+
+            console.log(differentDays);
+            if (differentDays === 1) {
+                newTime = "Yesterday"
+            } else if (differentDays > 1) {
+                newTime = format(time)
+            } else {
+                newTime = time.getHours() + ":" + time.getMinutes()
+            }
+            // console.log(item)
+            return newTime
+        }
         const dataAR = await ReportAR.find({}, {
-            _id: 0,
+            _id: 1,
             id: "$_id",
             reportType: 1,
             status: 1, location: 1,
             imageUrl: 1,
             animalName: 1,
             postTime: "$createdAt",
-            createdAt:1
+            createdAt: 1
         })
         dataAR.forEach(item => {
-            data.push(item)
+
+            // let conditions = { _id: item._id, postTime : "123"};
+            // let update = { postTime: setNewTime(item.createdAt) };
+
+            // ReportAR.findOneAndUpdate(conditions, update, function (err) {
+            //     if (err) {
+            //         res.json('nope');
+            //     }
+            //     else {
+            //         item = setNewTime(item.createdAt)
+            //     }
+            // })
+            
+            // item.save()
+            // console.log(setNewTime(item.createdAt));
+            // console.log(item._doc)
+            let newData = item._doc
+            newData.time = setNewTime(item.createdAt)
+            data.push(newData)
+            // data.push({...item, time : setNewTime(item.createdAt)})
         })
         const dataDA = await ReportDA.find({}, {
             _id: 0,
@@ -103,11 +161,14 @@ router.get('/report', authMiddleware, async (req, res) => {
             imageUrl: 1,
             phoneNumber: 1,
             postTime: "$createdAt",
-            createdAt:1
+            createdAt: 1
         })
 
         dataDA.forEach(item => {
-            data.push(item)
+            // console.log(item._doc)
+            let newData = item._doc
+            newData.time = setNewTime(item.createdAt)
+            data.push(newData)
         })
 
 
