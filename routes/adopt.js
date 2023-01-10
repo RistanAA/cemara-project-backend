@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Joi = require('joi')
 const Adopt = require('../schemas/adopt')
-const { count } = require('../schemas/reportDA')
+// const { count } = require('../schemas/reportDA')
 
 const adoptRequest = Joi.object({
     name: Joi.string().required(),

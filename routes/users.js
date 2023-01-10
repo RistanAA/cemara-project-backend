@@ -12,19 +12,14 @@ Users.use(cors());
 
 const re_pass = /^[a-zA-Z0-9]{4,30}$/;
 const userSchema = joi.object({
-  name: joi.string(),
-  email: joi.string().email().required(),
-  username: joi.string(),
+  email: joi.string().required(),
+  // phoneNumber: joi.string().required(),
+  namaLembaga: joi.string().required(),
   password: joi.string().pattern(re_pass).required(),
 });
 
-Users.post("/register", (req, res) => {
-  const userData = {
-    name: req.body.name,
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password,
-  };
+Users.post("/register", async (req, res) => {
+  const userData = await userSchema.validateAsync(req.body)
 
   User.findOne({ email: req.body.email })
     .then((user) => {
@@ -58,8 +53,7 @@ Users.post("/login", (req, res) => {
           });
           res.json({
             message: `${user.email} login succesfully`,
-            name: user.name,
-            username: user.username,
+            namaLembaga: user.namaLembaga,
             email: user.email,
             userId: user.userId,
             token,
