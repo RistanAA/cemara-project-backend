@@ -9,11 +9,7 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    phoneNumber: {
-        type: String,
-        required: true,
-    },
-    imageUrl: {
+    animalGroup: {
         type: String,
         required: true,
     },
@@ -21,16 +17,44 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    location: {
-        type: Object,
-        required: true,
-    },
-    name: {
+    imageUrl: {
         type: String,
         required: true,
     },
-    email: {
+    addInfo: {
         type: String,
+        required: true,
+    },
+    reporterName: {
+        type: String,
+        required: true,
+    },
+    reporterName: {
+        type: String,
+        required: true,
+    },
+    reporterEmail: {
+        type: String,
+        required: true,
+    },
+    reporterPhone: {
+        type: String,
+        required: true,
+    },
+    reporterAddress: {
+        type: String,
+        required: true,
+    },
+    province: {
+        type: String,
+        required: true,
+    },
+    city: {
+        type: String,
+        required: true,
+    },
+    community: {
+        type: Array,
         required: true,
     },
 },
