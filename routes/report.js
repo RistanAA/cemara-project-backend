@@ -153,7 +153,8 @@ router.get('/report', async (req, res) => {
             animalCategory: "$animalGroup",
             reporterPhone: 1,
             information: "$addInfo",
-            createdAt: 1
+            createdAt: 1,
+            address: "$reporterAddress"
         })
         dataAR.forEach(item => {
 
