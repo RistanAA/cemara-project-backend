@@ -150,7 +150,7 @@ router.get('/report', async (req, res) => {
             status: 1,
             imageUrl: 1,
             animalName: 1,
-            animalCategory: 1,
+            animalCategory: "$animalGroup",
             reporterPhone: 1,
             information: "$addInfo",
             createdAt: 1
