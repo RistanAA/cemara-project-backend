@@ -19,8 +19,6 @@ const userSchema = joi.object({
 });
 
 router.post("/register", async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
   const userData = await userSchema.validateAsync(req.body)
 
   User.findOne({ email: req.body.email })
