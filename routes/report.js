@@ -132,12 +132,12 @@ router.get('/report', async (req, res) => {
             let differentDays = (now.getTime() - time.getTime()) / (1000 * 3600 * 24)
             let newTime = ""
 
-            // console.log(differentDays);
-            if (differentDays === 1) {
+            console.log(differentDays);
+            if (differentDays > 1 && differentDays < 2) {
                 newTime = "Kemarin"
-            } else if (differentDays > 1) {
+            } else if (differentDays > 2) {
                 newTime = format(time)
-            } else {
+            } else if (differentDays < 1) {
                 newTime = time.getHours() + ":" + time.getMinutes()
             }
             // console.log(item)

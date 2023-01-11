@@ -13,7 +13,7 @@ const User = require("../schemas/user");
 const re_pass = /^[a-zA-Z0-9]{4,30}$/;
 const userSchema = joi.object({
   email: joi.string().required(),
-  // phoneNumber: joi.string().required(),
+  username: joi.string().required(),
   namaLembaga: joi.string().required(),
   password: joi.string().pattern(re_pass).required(),
 });
@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  User.findOne({ username: req.body.username })
+  User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
         if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -53,6 +53,7 @@ router.post("/login", (req, res) => {
           });
           res.json({
             message: `${user.email} login succesfully`,
+            username: user.username,
             namaLembaga: user.namaLembaga,
             email: user.email,
             userId: user.userId,
