@@ -1,5 +1,5 @@
 const express = require("express");
-const Users = express.Router();
+const router = express.Router();
 // const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const joi = require("joi");
@@ -18,7 +18,7 @@ const userSchema = joi.object({
   password: joi.string().pattern(re_pass).required(),
 });
 
-Users.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   const userData = await userSchema.validateAsync(req.body)
 
   User.findOne({ email: req.body.email })
@@ -43,7 +43,7 @@ Users.post("/register", async (req, res) => {
     });
 });
 
-Users.post("/login", (req, res) => {
+router.post("/login", (req, res) => {
   User.findOne({ username: req.body.username })
     .then((user) => {
       if (user) {
@@ -70,7 +70,7 @@ Users.post("/login", (req, res) => {
     });
 });
 
-Users.put("/profil/edit/:id", async (req, res) => {
+router.put("/profil/edit/:id", async (req, res) => {
   const { id } = req.params;
   const myquery = { userId: id };
   const updateData = {
@@ -96,7 +96,7 @@ Users.put("/profil/edit/:id", async (req, res) => {
   return res.status(200).json(updateData.$set);
 });
 
-Users.get("/profil/:Id", async (req, res) => {
+router.get("/profil/:Id", async (req, res) => {
   const { Id } = req.params;
   const dataProfil = await User.find({ userId: Id })
   // console.log(dataProfil)
@@ -112,4 +112,4 @@ Users.get("/profil/:Id", async (req, res) => {
   res.json(data)
 })
 
-module.exports = Users;
+module.exports = router;
