@@ -1,6 +1,6 @@
 const express = require("express");
 const Users = express.Router();
-const cors = require("cors");
+// const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const joi = require("joi");
 const bcrypt = require("bcryptjs");
@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 const JWTSECRETKEY = "cemara";
 
 const User = require("../schemas/user");
-Users.use(cors());
+// Users.use(cors());
 
 const re_pass = /^[a-zA-Z0-9]{4,30}$/;
 const userSchema = joi.object({
