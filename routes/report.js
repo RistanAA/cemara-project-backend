@@ -126,19 +126,25 @@ router.get('/report', async (req, res) => {
         const setNewTime = (itemTime) => {
             // console.log(itemTime);
             let time = new Date(itemTime)
+            let timeWIB = new Date(time.getTime())
+            // let timeWIB = new Date(time.getTime() + 7 * 60 * 60 * 1000)
+            // let timeWIB = new Date(time.getTime() + time.getTimezoneOffset()*60*1000)
             let now = new Date()
             // console.log(now);
+            // console.log(now.getHours());
+            // console.log(now.getHours() + ":" + now.getMinutes());
+            // console.log(now.getHours() + 7);
 
-            let differentDays = (now.getTime() - time.getTime()) / (1000 * 3600 * 24)
+            let differentDays = (now.getTime() - timeWIB.getTime()) / (1000 * 3600 * 24)
             let newTime = ""
 
-            console.log(differentDays);
+            // console.log(differentDays);
             if (differentDays > 1 && differentDays < 2) {
                 newTime = "Kemarin"
             } else if (differentDays > 2) {
-                newTime = format(time)
+                newTime = format(timeWIB)
             } else if (differentDays < 1) {
-                newTime = time.getHours() + ":" + time.getMinutes()
+                newTime = timeWIB.getHours() + ":" + timeWIB.getMinutes()
             }
             // console.log(item)
             return newTime
@@ -154,29 +160,15 @@ router.get('/report', async (req, res) => {
             reporterPhone: 1,
             information: "$addInfo",
             createdAt: 1,
-            address: "$reporterAddress"
+            address: "$reporterAddress",
+            reporterName: 1,
+            reporterEmail: 1,
+            reporterPhone: 1,
         })
         dataAR.forEach(item => {
-
-            // let conditions = { _id: item._id, postTime : "123"};
-            // let update = { postTime: setNewTime(item.createdAt) };
-
-            // ReportAR.findOneAndUpdate(conditions, update, function (err) {
-            //     if (err) {
-            //         res.json('nope');
-            //     }
-            //     else {
-            //         item = setNewTime(item.createdAt)
-            //     }
-            // })
-
-            // item.save()
-            // console.log(setNewTime(item.createdAt));
-            // console.log(item._doc)
             let newData = item._doc
             newData.time = setNewTime(item.createdAt)
             data.push(newData)
-            // data.push({...item, time : setNewTime(item.createdAt)})
         })
         const dataDA = await ReportDA.find({}, {
             _id: 0,
@@ -207,6 +199,33 @@ router.get('/report', async (req, res) => {
             statusCode: 200,
             message: "Ok",
             data
+        })
+    } catch (error) {
+        res.status(400).send({
+            statusCode: 400,
+            message: error.message
+        })
+    }
+})
+
+router.post('/report/update-status', async (req, res) => {
+    try {
+        const { id } = req.body
+        console.log(id)
+
+        const data = await ReportAR.findOne({ _id: id })
+
+        if (data.status === "requested") {
+            data.status = "accepted"
+        } else if (data.status === "accepted") {
+            data.status = "finished"
+        }
+
+        await data.save()
+
+        res.status(200).send({
+            statusCode:200,
+            message: "Status updated successfully"
         })
     } catch (error) {
         res.status(400).send({
