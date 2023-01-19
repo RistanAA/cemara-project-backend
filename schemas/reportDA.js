@@ -25,7 +25,7 @@ const reportDASchema = new mongoose.Schema({
         type: Object,
         required: true,
     },
-    community: {
+    communityList: {
         type: Array,
         required: true,
     },

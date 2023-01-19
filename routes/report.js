@@ -6,39 +6,27 @@ const ReportAR = require('../schemas/reportAR')
 const authMiddleware = require('../middlewares/authMiddleware')
 
 const reportDARequest = Joi.object({
-    reportType: Joi.string().required(),
-    animalGroup: Joi.string().required(),
-    animalName: Joi.string().required(),
+    // reportType: Joi.string().required(),
+    animalCategory: Joi.string().required(),
     imageUrl: Joi.string().required(),
-    addInfo: Joi.string().required(),
-    reporterName: Joi.string().required(),
-    reporterEmail: Joi.string().email().required(),
-    reporterPhone: Joi.string().required(),
-    reporterAddress: Joi.string().required(),
-    province: Joi.string().required(),
-    city: Joi.string().required(),
-    community: Joi.allow(),
+    phoneNumber: Joi.string().required(),
+    location: Joi.allow(),
+    communityList: Joi.allow(),
 })
 
 
 
 router.post('/report/da', async (req, res) => {
     try {
-        const { reportType, animalGroup, animalName, imageUrl, addInfo, reporterName, reporterEmail, reporterPhone, reporterAddress, province, city, community } = await reportDARequest.validateAsync(req.body)
+        const { animalCategory, imageUrl, communityList, phoneNumber, location } = await reportDARequest.validateAsync(req.body)
         await ReportDA.create({
-            reportType,
+            reportType: "DA",
             status: "requested",
-            animalGroup,
-            animalName,
+            animalCategory,
             imageUrl,
-            addInfo,
-            reporterName,
-            reporterEmail,
-            reporterPhone,
-            reporterAddress,
-            province,
-            city,
-            community
+            phoneNumber,
+            location,
+            communityList
         })
         res.status(201).send({
             statusCode: 201,
@@ -55,37 +43,37 @@ router.post('/report/da', async (req, res) => {
 
 const reportARRequest = Joi.object({
     reportType: Joi.string().required(),
-    animalGroup: Joi.string().required(),
+    animalType: Joi.string().required(),
     animalName: Joi.string().required(),
     imageUrl: Joi.string().required(),
     addInfo: Joi.string().required(),
-    reporterName: Joi.string().required(),
-    reporterEmail: Joi.string().email().required(),
-    reporterPhone: Joi.string().required(),
-    reporterAddress: Joi.string().required(),
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phoneNumber: Joi.string().required(),
+    address: Joi.string().required(),
     province: Joi.string().required(),
     city: Joi.string().required(),
-    community: Joi.allow(),
+    communityList: Joi.allow(),
 
 })
 
 router.post('/report/ar', async (req, res) => {
     try {
-        const { reportType, animalGroup, animalName, imageUrl, addInfo, reporterName, reporterEmail, reporterPhone, reporterAddress, province, city, community } = await reportARRequest.validateAsync(req.body)
+        const { reportType, animalType, animalName, imageUrl, addInfo, name, email, phoneNumber, address, province, city, communityList } = await reportARRequest.validateAsync(req.body)
         await ReportAR.create({
             reportType,
             status: "requested",
-            animalGroup,
+            animalType,
             animalName,
             imageUrl,
             addInfo,
-            reporterName,
-            reporterEmail,
-            reporterPhone,
-            reporterAddress,
+            name,
+            email,
+            phoneNumber,
+            address,
             province,
             city,
-            community
+            communityList
         })
         res.status(201).send({
             statusCode: 201,
@@ -156,14 +144,13 @@ router.get('/report', async (req, res) => {
             status: 1,
             imageUrl: 1,
             animalName: 1,
-            animalCategory: "$animalGroup",
-            reporterPhone: 1,
+            animalType: 1,
             information: "$addInfo",
             createdAt: 1,
-            address: "$reporterAddress",
-            reporterName: 1,
-            reporterEmail: 1,
-            reporterPhone: 1,
+            address: 1,
+            name: 1,
+            email: 1,
+            phoneNumber: 1,
         })
         dataAR.forEach(item => {
             let newData = item._doc
@@ -176,15 +163,19 @@ router.get('/report', async (req, res) => {
             reportType: 1,
             status: 1, location: 1,
             imageUrl: 1,
-            reporterPhone: 1,
+            animalCategory: 1,
+            phoneNumber: 1,
             postTime: "$createdAt",
             createdAt: 1
         })
 
         dataDA.forEach(item => {
-            // console.log(item._doc)
             let newData = item._doc
+            const { address, province, city } = newData.location
             newData.time = setNewTime(item.createdAt)
+            newData.address = address
+            newData.province = province
+            newData.city = city
             data.push(newData)
         })
 
@@ -210,10 +201,16 @@ router.get('/report', async (req, res) => {
 
 router.post('/report/update-status', async (req, res) => {
     try {
-        const { id } = req.body
-        console.log(id)
+        const { id, type } = req.body
 
-        const data = await ReportAR.findOne({ _id: id })
+        let data = []
+
+        if (type === "DA") {
+            data = await ReportDA.findOne({ _id: id })
+        } else if (type === "AR") {
+            data = await ReportAR.findOne({ _id: id })
+        }
+
 
         if (data.status === "requested") {
             data.status = "accepted"
@@ -224,7 +221,7 @@ router.post('/report/update-status', async (req, res) => {
         await data.save()
 
         res.status(200).send({
-            statusCode:200,
+            statusCode: 200,
             message: "Status updated successfully"
         })
     } catch (error) {

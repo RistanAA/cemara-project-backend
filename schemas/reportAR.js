@@ -9,7 +9,7 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    animalGroup: {
+    animalType: {
         type: String,
         required: true,
     },
@@ -25,23 +25,19 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    reporterName: {
+    name: {
         type: String,
         required: true,
     },
-    reporterName: {
+    email: {
         type: String,
         required: true,
     },
-    reporterEmail: {
+    phoneNumber: {
         type: String,
         required: true,
     },
-    reporterPhone: {
-        type: String,
-        required: true,
-    },
-    reporterAddress: {
+    address: {
         type: String,
         required: true,
     },
@@ -53,7 +49,7 @@ const reportARSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    community: {
+    communityList: {
         type: Array,
         required: true,
     },
