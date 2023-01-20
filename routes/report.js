@@ -61,7 +61,7 @@ router.post('/report/ar', async (req, res) => {
     try {
         const { reportType, animalType, animalName, imageUrl, addInfo, name, email, phoneNumber, address, province, city, communityList } = await reportARRequest.validateAsync(req.body)
         await ReportAR.create({
-            reportType,
+            reportType : "AR",
             status: "requested",
             animalType,
             animalName,
