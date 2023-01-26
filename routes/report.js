@@ -38,6 +38,7 @@ router.post('/report/da', async (req, res) => {
             statusCode: 400,
             message: error.message
         })
+        console.log(error);
     }
 })
 
@@ -61,7 +62,7 @@ router.post('/report/ar', async (req, res) => {
     try {
         const { reportType, animalType, animalName, imageUrl, addInfo, name, email, phoneNumber, address, province, city, communityList } = await reportARRequest.validateAsync(req.body)
         await ReportAR.create({
-            reportType : "AR",
+            reportType: "AR",
             status: "requested",
             animalType,
             animalName,
@@ -85,6 +86,7 @@ router.post('/report/ar', async (req, res) => {
             statusCode: 400,
             message: error.message
         })
+        console.log(error);
     }
 })
 
@@ -147,6 +149,7 @@ router.get('/report', async (req, res) => {
             animalType: 1,
             information: "$addInfo",
             createdAt: 1,
+            updatedAt: 1,
             address: 1,
             name: 1,
             email: 1,
@@ -166,7 +169,8 @@ router.get('/report', async (req, res) => {
             animalCategory: 1,
             phoneNumber: 1,
             postTime: "$createdAt",
-            createdAt: 1
+            createdAt: 1,
+            updatedAt: 1,
         })
 
         dataDA.forEach(item => {
@@ -182,7 +186,7 @@ router.get('/report', async (req, res) => {
 
         // console.log(data)
         data.sort(function (a, b) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
+            return new Date(b.updatedAt) - new Date(a.updatedAt);
         });
 
         // console.log(sorted);
@@ -231,5 +235,20 @@ router.post('/report/update-status', async (req, res) => {
         })
     }
 })
+
+// router.post('/delete/some', async (req, res) => {
+//     try {
+//         const { info } = req.body
+//         const data = await ReportAR.deleteMany({ addInfo: info })
+        
+//         res.send({
+//             data
+//         })
+//     } catch (error) {
+//         res.status(400).send({
+//             message: error.message
+//         })
+//     }
+// })
 
 module.exports = router;
